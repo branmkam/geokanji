@@ -1,35 +1,37 @@
 import citykanji from "../../data/japanesecitykanji";
+import prefs from "../../data/japan_prefectures.js";
 
-export default function CityText({ selected }) {
-  
-    const info = selected
-    ? selected.Japanese
-        .split("")
-        .map((x) => Object.keys(citykanji).map((k) => citykanji[k][x]))
+export default function CityText({ selected, setIsCities, setClicked }) {
+  const info = selected
+    ? selected.Japanese.split("").map((x) =>
+        Object.keys(citykanji).map((k) => citykanji[k][x])
+      )
     : "";
-    
+
   return (
     <div>
       <div className="flex text-lg gap-4 md:text-2xl text-center font-bold justify-around flex-col">
-        <p>
-          {selected['City (Special Ward)']}{" "}
-          <a
-            href={`https://jisho.org/search/${selected.Japanese.split("").slice(
-              -1
-            )}`}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-blue-800"
+        <p className="md:flex-row flex w-full items-end justify-center gap-1">
+          {selected["City (Special Ward)"]} <span>|</span>
+          <p
+            //go to prefecture
+            onClick={() => {
+              setIsCities(false);
+              setClicked(
+                prefs.features.find((el) => el.id == selected.Prefecture)
+              );
+            }}
+            className="text-lg text-blue-900 hover:text-blue-600 hover:cursor-pointer"
           >
-            ({selected.Japanese.split("").slice(-1)})
-          </a>
+            {selected.Prefecture}
+          </p>
         </p>
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row justify-center gap-3">
           {selected.Japanese.split("")
             .slice(0, -1)
             .map((x, ind) => (
-              <div className="flex flex-col w-72 text-center gap-4">
-                <div className="flex flex-row  justify-center items-end gap-0.5">
+              <div className="flex flex-col w-full text-center gap-4">
+                <div className="flex flex-row justify-center items-end gap-0.5">
                   <a
                     href={`https://jisho.org/search/${x}`}
                     target="_blank"

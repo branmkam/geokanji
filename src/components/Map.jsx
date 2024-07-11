@@ -9,7 +9,6 @@ import {
 } from "react-leaflet";
 import prefs from "../../data/japan_prefectures.js";
 import seedrandom from "seedrandom";
-import { useEffect } from "react";
 import startcities from "../../data/startcities.js";
 
 export default function Map({ isCities, setHovered, clicked, setClicked }) {
@@ -70,11 +69,23 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
         click: (e) => {
           setClicked(startcities[s]);
         },
+        mouseover: (e) => {
+          setHovered(startcities[s]);
+        },
+        mouseout: (e) => {
+          setHovered(null);
+        },
       }}
       radius={8}
       center={[startcities[s]["Latitude"], startcities[s]["Longitude"]]}
+      style={{
+        fillColor:
+          clicked && clicked.Latitude == startcities[s]["Latitude"]
+            ? "#ff000099"
+            : "#0000ff99",
+      }}
     >
-      <Popup>{startcities[s]["City (Special Ward)"]}</Popup>
+      {/* <Popup>{startcities[s]["City (Special Ward)"]}</Popup> */}
     </CircleMarker>
   ));
 

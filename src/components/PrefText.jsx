@@ -24,13 +24,13 @@ export default function PrefText({ selected }) {
            {" "}({selected.properties.nam_ja.split("").slice(-1)})
           </a>
         </p>
-        <div className="flex flex-row gap-3">
+        <div className="flex flex-row justify-center gap-3">
           {selected.properties.nam_ja
             .split("")
             .slice(0, -1)
             .map((x, ind) => (
-              <div className="flex flex-col w-72 text-center gap-4">
-                <div className="flex flex-row  justify-center items-end gap-0.5">
+              <div className="flex flex-col w-full text-center gap-4">
+                <div className="flex flex-row justify-center items-end gap-0.5">
                   <a
                     href={`https://jisho.org/search/${x}`}
                     target="_blank"
