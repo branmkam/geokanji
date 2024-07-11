@@ -66,7 +66,11 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
   //cities
   const markers = Object.keys(startcities).map((s) => (
     <CircleMarker
-      onClick={() => console.log(startcities[s]["City (Special Ward)"])}
+      eventHandlers={{
+        click: (e) => {
+          setClicked(startcities[s]);
+        },
+      }}
       radius={8}
       center={[startcities[s]["Latitude"], startcities[s]["Longitude"]]}
     >

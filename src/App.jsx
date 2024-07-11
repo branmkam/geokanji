@@ -6,6 +6,7 @@ import prefkanji from "../data/japaneseprefkanji";
 import citykanji from "../data/japanesecitykanji";
 import startcities from "../data/startcities";
 import PrefText from "./components/PrefText";
+import CityText from "./components/CityText";
 
 function App() {
   const [isCities, setIsCities] = useState(true);
