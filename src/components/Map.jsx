@@ -12,6 +12,11 @@ import seedrandom from "seedrandom";
 import startcities from "../../data/startcities.js";
 
 export default function Map({ isCities, setHovered, clicked, setClicked }) {
+  const bounds = [
+    [26, 127],
+    [46.5, 151],
+  ];
+
   const MapController = () => {
     const map = useMap();
 
@@ -95,6 +100,7 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
       center={[36.648, 138.19]}
       zoomControl={false}
       zoom={5}
+      bounds={bounds}
     >
       <TileLayer
         attribution="&copy; Esri"

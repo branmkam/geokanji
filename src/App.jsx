@@ -10,6 +10,8 @@ function App() {
   const [clicked, setClicked] = useState(null);
   const [hovered, setHovered] = useState(null);
 
+  
+
   const selected = hovered ? hovered : clicked;
 
   const infotext = selected ? (
@@ -30,7 +32,7 @@ function App() {
 
   return (
     <>
-      <div className="leaflet-container z-0">
+      <div className="z-0 leaflet-container">
         <Map
           isCities={isCities}
           setHovered={setHovered}
@@ -38,17 +40,17 @@ function App() {
           setClicked={setClicked}
         />
       </div>
-      <div className="z-20 font-outfit px-4 py-2 bottom-2 left-2 fixed h-80 md:h-64 w-[95%] md:w-3/4 rounded-xl bg-[#ffffffaa]">
+      <div className="z-20 font-outfit px-4 py-2 bottom-2 left-2 fixed h-96 md:h-80 w-[95%] md:w-3/4 rounded-xl bg-[#ffffffaa]">
         {infotext}
       </div>
-      <div className="z-20 font-oswald fixed top-2 left-2 text-white text-4xl">
+      <div className="fixed z-20 text-4xl text-white font-oswald top-2 left-2">
         GeoKanji
       </div>
       <button
         onClick={() => {
           setIsCities((s) => !s), setClicked(null);
         }}
-        className="z-20 font-oswald fixed top-2 right-2 text-white text-xl p-2 bg-blue-600 rounded-xl"
+        className="fixed z-20 p-2 text-xl text-white bg-blue-600 font-oswald top-2 right-2 rounded-xl"
       >
         See {isCities ? "Prefectures" : "Cities"}
       </button>

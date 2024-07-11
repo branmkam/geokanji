@@ -10,8 +10,8 @@ export default function CityText({ selected, setIsCities, setClicked }) {
 
   return (
     <div>
-      <div className="flex text-lg gap-4 md:text-2xl text-center font-bold justify-around flex-col">
-        <p className="md:flex-row flex w-full items-end justify-center gap-1">
+      <div className="flex flex-col justify-around gap-4 text-lg font-bold text-center md:text-2xl">
+        <p className="flex items-end justify-center w-full gap-1 md:flex-row">
           {selected["City (Special Ward)"]} <span>|</span>
           <p
             //go to prefecture
@@ -30,13 +30,13 @@ export default function CityText({ selected, setIsCities, setClicked }) {
           {selected.Japanese.split("")
             .slice(0, -1)
             .map((x, ind) => (
-              <div className="flex flex-col w-full text-center gap-4">
+              <div className="flex flex-col w-full gap-4 text-center">
                 <div className="flex flex-row justify-center items-end gap-0.5">
                   <a
                     href={`https://jisho.org/search/${x}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="px-2 md:text-6xl text-3xl hover:text-blue-800"
+                    className="px-2 text-3xl md:text-6xl hover:text-blue-800"
                   >
                     {x}
                   </a>
@@ -47,7 +47,7 @@ export default function CityText({ selected, setIsCities, setClicked }) {
                   }
                 </div>
                 {
-                  <div className="flex flex-col gap-4 h-44 md:h-28 overflow-y-auto">
+                  <div className="flex flex-col gap-4 overflow-y-auto h-44 md:h-36">
                     {info[ind]
                       .slice(0, 4)
                       .map((i, infoind) =>
