@@ -6,10 +6,15 @@ import {
   Marker,
   CircleMarker,
   Popup,
+  useMapEvent,
 } from "react-leaflet";
+import { useEffect, useState } from "react";
 import prefs from "../../data/japan_prefectures.js";
 import seedrandom from "seedrandom";
 import startcities from "../../data/startcities.js";
+import zoomLevel from "../utils/zoomLevel.js";
+import citykanji from "../../data/japanesecitykanji.js";
+import parseReadings from "../utils/parseReadings.js";
 
 export default function Map({ isCities, setHovered, clicked, setClicked }) {
   const bounds = [
@@ -17,12 +22,15 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
     [46.5, 151],
   ];
 
+  const [zoom, setZoom] = useState(5);
+
   const MapController = () => {
     const map = useMap();
-
-    // do something with map, in a useEffect hook, for example.
-
-    return <></>;
+    const handleZoomEnd = (e) => {
+      setZoom(e.target.getZoom());
+    };
+    useMapEvent("zoomend", handleZoomEnd);
+    return null;
   };
 
   //prefectures
@@ -68,31 +76,37 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
   }
 
   //cities
-  const markers = Object.keys(startcities).map((s) => (
-    <CircleMarker
-      eventHandlers={{
-        click: (e) => {
-          setClicked(startcities[s]);
-        },
-        mouseover: (e) => {
-          setHovered(startcities[s]);
-        },
-        mouseout: (e) => {
-          setHovered(null);
-        },
-      }}
-      radius={8}
-      center={[startcities[s]["Latitude"], startcities[s]["Longitude"]]}
-      style={{
-        fillColor:
-          clicked && clicked.Latitude == startcities[s]["Latitude"]
-            ? "#ff000099"
-            : "#0000ff99",
-      }}
-    >
-      {/* <Popup>{startcities[s]["City (Special Ward)"]}</Popup> */}
-    </CircleMarker>
-  ));
+  const markers = Object.keys(startcities)
+    .filter(
+      (s) =>
+        zoomLevel(startcities[s]["Population"]) < zoom ||
+        (clicked && clicked.index == startcities[s].index)
+    )
+    .map((s) => (
+      <CircleMarker
+        eventHandlers={{
+          click: (e) => {
+            setClicked(startcities[s]);
+          },
+          mouseover: (e) => {
+            setHovered(startcities[s]);
+          },
+          mouseout: (e) => {
+            setHovered(null);
+          },
+        }}
+        radius={20 - zoomLevel(startcities[s]["Population"]) * 2}
+        center={[startcities[s]["Latitude"], startcities[s]["Longitude"]]}
+        style={{
+          fillColor:
+            clicked && clicked.Latitude == startcities[s]["Latitude"]
+              ? "#ff000099"
+              : "#0000ff99",
+        }}
+      >
+        {/* <Popup>{startcities[s]["City (Special Ward)"]}</Popup> */}
+      </CircleMarker>
+    ));
 
   return (
     <MapContainer
@@ -100,6 +114,8 @@ export default function Map({ isCities, setHovered, clicked, setClicked }) {
       center={[36.648, 138.19]}
       zoomControl={false}
       zoom={5}
+      minZoom={4}
+      maxZoom={12}
       bounds={bounds}
     >
       <TileLayer

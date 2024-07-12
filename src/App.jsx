@@ -4,13 +4,36 @@ import Map from "./components/Map";
 import "leaflet/dist/leaflet.css";
 import PrefText from "./components/PrefText";
 import CityText from "./components/CityText";
+import startcities from "../data/startcities";
+import parseReadings from "./utils/parseReadings";
+import citykanji from "../data/japanesecitykanji";
 
 function App() {
+  const [matches, setMatches] = useState({});
+
+  //get kanji matches
+  useEffect(() => {
+    Object.keys(startcities).forEach((s) => {
+      const srs = parseReadings(
+        startcities[s]["City (Special Ward)"],
+        startcities[s]["Japanese"]
+          .split("")
+          .slice(0, -1)
+          .map((ch) => citykanji["kun names"][ch]),
+        startcities[s]["Japanese"]
+          .split("")
+          .slice(0, -1)
+          .map((ch) => citykanji["on names"][ch])
+      );
+      setMatches((m) => {
+        return { ...m, [`${startcities[s].index}`]: srs };
+      });
+    });
+  }, [startcities]);
+
   const [isCities, setIsCities] = useState(true);
   const [clicked, setClicked] = useState(null);
   const [hovered, setHovered] = useState(null);
-
-  
 
   const selected = hovered ? hovered : clicked;
 
@@ -20,6 +43,7 @@ function App() {
         selected={selected}
         setIsCities={setIsCities}
         setClicked={setClicked}
+        matches={matches}
       />
     ) : (
       <PrefText selected={selected} />

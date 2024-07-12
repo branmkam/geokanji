@@ -1,12 +1,20 @@
 import citykanji from "../../data/japanesecitykanji";
 import prefs from "../../data/japan_prefectures.js";
 
-export default function CityText({ selected, setIsCities, setClicked }) {
+export default function CityText({
+  matches,
+  selected,
+  setIsCities,
+  setClicked,
+}) {
   const info = selected
     ? selected.Japanese.split("").map((x) =>
         Object.keys(citykanji).map((k) => citykanji[k][x])
       )
     : "";
+
+  const match = matches[selected.index];
+  console.log(match);
 
   return (
     <div>
@@ -25,7 +33,15 @@ export default function CityText({ selected, setIsCities, setClicked }) {
           >
             {selected.Prefecture}
           </p>
+          <p className="text-lg">
+            (
+            {selected["Population"] > 1000000
+              ? (selected["Population"] / 1000000).toFixed(2) + "m"
+              : (selected["Population"] / 1000).toFixed(0) + "k"}
+            )
+          </p>
         </p>
+
         <div className="flex flex-row justify-center gap-3">
           {selected.Japanese.split("")
             .slice(0, -1)
@@ -48,15 +64,41 @@ export default function CityText({ selected, setIsCities, setClicked }) {
                 </div>
                 {
                   <div className="flex flex-col gap-4 overflow-y-auto h-44 md:h-36">
-                    {info[ind]
-                      .slice(0, 4)
-                      .map((i, infoind) =>
-                        infoind == 0 ? (
-                          <p className="text-lg">{i}</p>
-                        ) : (
-                          <p className="text-sm">{i}</p>
-                        )
-                      )}
+                    {<p className="text-lg">{info[ind][0]}</p>}
+                    {
+                      //kun highlight
+                      <p className="text-sm">
+                        {ind < match.length
+                          ? info[ind][1] &&
+                            info[ind][1]
+                              .split(" ")
+                              .map((x, i) =>
+                                match[ind][0] == 1 && match[ind][1] == i - 1 ? (
+                                  <span className="text-red-500">{x}</span>
+                                ) : (
+                                  <span>{x} </span>
+                                )
+                              )
+                          : info[ind][1]}
+                      </p>
+                    }
+                    {
+                      //on highlight
+                      <p className="text-sm">
+                        {ind < match.length
+                          ? info[ind][2] &&
+                            info[ind][2]
+                              .split(" ")
+                              .map((x, i) =>
+                                match[ind][0] == 0 && match[ind][1] == i - 1 ? (
+                                  <span className="text-red-500">{x}</span>
+                                ) : (
+                                  <span>{x} </span>
+                                )
+                              )
+                          : info[ind][2]}
+                      </p>
+                    }
                   </div>
                 }
               </div>
