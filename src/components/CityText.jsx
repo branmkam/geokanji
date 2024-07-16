@@ -14,7 +14,6 @@ export default function CityText({
     : "";
 
   const match = matches[selected.index];
-  console.log(match);
 
   return (
     <div>
